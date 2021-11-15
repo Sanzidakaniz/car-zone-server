@@ -85,12 +85,12 @@ try{
             res.json(result)
          });
 
-    //        //Orders get api for manage all orders
-    // app.get('/orders',async(req,res)=>{
-    //     const cursor=ordersCollection.find({});
-    //     const orders=await cursor.toArray();
-    //     res.send(orders);
-    // });
+           //Orders get api for manage all orders
+    app.get('/allorders',async(req,res)=>{
+        const cursor=ordersCollection.find({});
+        const orders=await cursor.toArray();
+        res.send(orders);
+    });
 
    
     //order delete 
