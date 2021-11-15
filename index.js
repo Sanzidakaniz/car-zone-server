@@ -102,16 +102,76 @@ try{
         res.json(result);
     });
 
-    //orders get api 
-    app.get('/orders/email/:email', async (req, res) => {
+
+    app.get('/orders', async (req, res) => {
         const email = req.query.email;
         const query = { email: email };
         const cursor = ordersCollection.find(query);
         const orders = await cursor.toArray();
         res.json(orders);
-    })
+    });
 
-///users get api
+    // //orders get api 
+    // app.get('/myorder', async (req, res) => {
+    //     const email = req.query.email;
+    //     const query = { email: email };
+    //     const cursor = ordersCollection.find(query);
+    //     const orders = await cursor.toArray();
+    //     res.json(orders);
+    // })
+
+// ///users get api
+// app.get('/users/:email', async (req, res) => {
+//     const email = req.params.email;
+//     const query = { email: email };
+//     const user = await usersCollection.findOne(query);
+//     let isAdmin = false;
+//     if (user?.role === 'admin') {
+//         isAdmin = true;
+//     }
+//     res.json({ admin: isAdmin });
+// })
+
+//     //users post api 
+    
+//       app.post('/users',async(req,res)=>{
+//         const user= req.body;
+//             console.log('hit the api',user);
+//              const result=await usersCollection.insertOne(user); 
+//              console.log(result);
+//             res.json(result)
+//          });
+// //update part
+//          app.put('/users/admin', async (req, res) => {
+//             const user = req.body;
+//             const filter = { email: user.email };
+//             const updateDoc = { $set: { role: 'admin' } };
+//             const result = await usersCollection.updateOne(filter, updateDoc);
+//             res.json(result);
+//         });
+//          //admin put part
+
+//         //  app.put('/users/admin',  async (req, res) => {
+//         //     const user = req.body;
+//         //     console.log(user);
+//         //     if (requester) {
+//         //         const requesterAccount = await usersCollection.findOne({ email: requester });
+//         //         if (requesterAccount.role === 'admin') {
+//         //             const filter = { email: user.email };
+//         //             const updateDoc = { $set: { role: 'admin' } };
+//         //             const result = await usersCollection.updateOne(filter, updateDoc);
+//         //             res.json(result);
+//         //         }
+//         //     }
+//         //     else {
+//         //         res.status(403).json({ message: 'you do not have access to make admin' })
+//         //     }
+
+//         // })
+
+    
+
+//get admin user
 app.get('/users/:email', async (req, res) => {
     const email = req.params.email;
     const query = { email: email };
@@ -123,37 +183,21 @@ app.get('/users/:email', async (req, res) => {
     res.json({ admin: isAdmin });
 })
 
-    //users post api 
-    
-      app.post('/users',async(req,res)=>{
-        const user= req.body;
-            console.log('hit the api',user);
-             const result=await usersCollection.insertOne(user); 
-             console.log(result);
-            res.json(result)
-         });
-
-         //admin put part
-
-         app.put('/users/admin', verifyToken, async (req, res) => {
-            const user = req.body;
-            const requester = req.decodedEmail;
-            if (requester) {
-                const requesterAccount = await usersCollection.findOne({ email: requester });
-                if (requesterAccount.role === 'admin') {
-                    const filter = { email: user.email };
-                    const updateDoc = { $set: { role: 'admin' } };
-                    const result = await usersCollection.updateOne(filter, updateDoc);
-                    res.json(result);
-                }
-            }
-            else {
-                res.status(403).json({ message: 'you do not have access to make admin' })
-            }
-
-        })
-
-    
+//POST Users
+app.post('/users', async (req, res) => {
+    const user = req.body;
+    const result = await usersCollection.insertOne(user);
+    // console.log(result);
+    res.json(result);
+});
+//Update Users
+app.put('/users', async (req, res) => {
+    const user = req.body;
+    const filter = { email: user.email };
+    const updateDoc = { $set: { role: 'admin' } };
+    const result = await usersCollection.updateOne(filter, updateDoc);
+    res.json(result);
+});
     
 }
 
